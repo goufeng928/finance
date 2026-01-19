@@ -1,0 +1,81 @@
+DOC_Web-Crawler_requests-html_使用示例_GF_2024-07-11.txt
+
+Create by GF 2024-07-11 15:55
+
+--------------------------------------------------
+
+requests-html(Python 3.8.0) 抓取步骤:
+
+* 完整代码:
+
+    # 导入 requests-html 库。
+    from requests_html import HTMLSession
+
+    # 创建一个HTMLSession对象
+    Session = HTMLSession()
+
+    # 发送 GET 请求并获取响应。
+    Response = Session.get("https://www.example.com")
+
+    # 还可以处理 JavaScript 渲染的页面。
+    # 如果需要等待 JavaScript 加载完成, 可以使用 Response.html.render() 方法。
+    # 但请注意, render() 方法依赖于 Pyppeteer (基于 Chromium 的无头浏览器), 它可能需要额外的安装和配置。
+    Response.html.render(sleep=2) # -> 等待 2 秒让页面加载完成(由于 render() 方法可能会因为多种原因失败, 如网络问题, JavaScript 错误, 环境配置不正确等, 你应该准备好处理可能抛出的异常)。
+
+    # 使用 PyQuery 解析 HTML 内容。
+    # 注意：Response.html.find() 方法类似于 jQuery 的 $() 选择器。
+    title = Response.html.find('title', first=True)  # -> first=True 表示返回第一个匹配的元素。
+
+    if title:
+        print("网页标题是:", title.text)
+    else:
+        print("未找到网页标题")
+
+    # 记得关闭 Session。
+    Session.close()
+
+--------------------------------------------------
+
+requests-html(Python 3.8.0) 抓取步骤(AsyncHTMLSession):
+
+1. 使用 async with AsyncHTMLSession() 来创建一个异步的会话。
+2. 使用 await 关键字来等待异步操作完成, 比如 await Response.html.afind('p')。
+3. 使用 asyncio.run(Fetch_and_Parse()) 来运行我们的异步函数。这是在 Python 3.7+ 中推荐的启动异步程序的方式。
+
+* 另外, 请注意 afind 方法而不是 find 方法。在 AsyncHTMLSession 中, 你应该使用以 a 开头的方法(如 afind、arender 等), 这些方法是为异步环境设计的。
+
+* 完整代码:
+
+    import asyncio
+    from requests_html import AsyncHTMLSession
+
+    async def Fetch_and_Parse():
+
+        # 创建一个 AsyncHTMLSession 对象。
+        async with AsyncHTMLSession() as Session:
+            
+            # 发送异步 GET 请求。
+            async with Session.get('https://example.com') as Response:
+                
+                # 使用 response 的 html 属性来获取网页的 HTML 内容。
+                # 然后, 使用类似 jQuery 的语法来筛选标签。
+                p_tags = await Response.html.afind('p')  # -> 注意使用 afind 而不是 find, 因为我们在异步环境中。
+
+                # 遍历所有的 <p> 标签并打印其内容。
+                for p in p_tags:
+                    print(p.text)
+
+    # 如果你在 Python 3.7+ 中, 可以使用 asyncio 的 run 函数来运行异步程序。
+    asyncio.run(Fetch_and_Parse())
+
+--------------------------------------------------
+
+错误处理:
+
+* RuntimeError: Cannot use HTMLSession within an existing event loop. Use AsyncHTMLSession instead.
+  当你在使用 requests-html 并且遇到错误消息 "Cannot use HTMLSession within an existing event loop. Use AsyncHTMLSession instead." 时, 这通常意味着你正在一个已经运行了事件循环的环境中 (比如在一个异步的 Python 程序中), 而 HTMLSession 不是为异步环境设计的。
+  HTMLSession 是同步的, 而 AsyncHTMLSession 是为异步编程设计的。
+  为了解决这个问题, 你应该使用 AsyncHTMLSession 而不是 HTMLSession。
+
+--------------------------------------------------
+EOF

@@ -1,0 +1,50 @@
+{
+  "name": "@nocobase/plugin-external-datasource-mssql",
+  "version": "0.1.0",
+  "displayName": "MSSQL External Data Source",
+  "displayName.zh-CN": "MSSQL 外部数据源",
+  "description": "NocoBase MSSQL External Data Source Plugin",
+  "main": "dist/server/index.js",
+  "exports": {
+    ".": "./dist/server/index.js",
+    "./client": "./dist/client/index.js",
+    "./package.json": "./package.json"
+  },
+  "nocobase": {
+    "server": "./dist/server/index.js",
+    "client": "./dist/client/index.js"
+  },
+  "license": "MIT",
+  "keywords": [
+    "nocobase",
+    "plugin",
+    "mssql",
+    "external-datasource"
+  ],
+  "scripts": {
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:client": "tsc -p tsconfig.client.json",
+    "dev": "npm run build:server -- --watch & npm run build:client -- --watch"
+  },
+  "peerDependencies": {
+    "@nocobase/server": "1.x",
+    "@nocobase/client": "1.x",
+    "@nocobase/plugin-data-source-manager": "1.x"
+  },
+  "dependencies": {
+    "mssql": "^10.0.1",
+    "tedious": "^16.6.1"
+  },
+  "devDependencies": {
+    "@nocobase/server": "1.9.25",
+    "@nocobase/client": "1.9.25",
+    "@nocobase/plugin-data-source-manager": "1.9.25",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "antd": "^5.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

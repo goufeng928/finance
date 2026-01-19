@@ -1,0 +1,83 @@
+{
+    "MYSQL": {
+        "VERSION": {
+            "8.0": {
+                "CREATE_TABLE": {
+                    "STATMENT": ["CREATE TABLE[ IF NOT EXISTS] <table_name> (...);"],
+                    "TYPE": {
+                        "integer":             "<col_name> INT",
+                        "integer_primary_key": "<key_name> INT NOT NULL AUTO_INCREMENT, ..., PRIMARY KEY (<key_name>)",
+                        "text":                "<col_name> VARCHAR(128)",
+                        "decimal":             "<col_name> DOUBLE(28,4)"
+                    }
+                },
+                "CREATE_USER": {
+                    "STATMENT": ["CREATE USER[ IF NOT EXISTS] '<user_name>'@'%' IDENTIFIED WITH mysql_native_password BY '<password>';"]
+                },
+                "GRANT_USER": {
+                    "STATMENT": [
+                        "GRANT ALL PRIVILEGES ON <database_name>.<table_name> TO '<user_name>'@'%' WITH GRANT OPTION;",
+                        "GRANT SELECT, INSERT, UPDATE, DELETE ON <database_name>.<table_name> TO '<user_name>'@'%';"
+                    ]
+                }
+            }
+        }
+    },
+
+    "SQLITE": {
+        "VERSION": {
+            "3.5": {
+                "CREATE_TABLE": {
+                    "STATMENT": ["CREATE TABLE[ IF NOT EXISTS] <table_name> (...);"],
+                    "TYPE": {
+                        "integer":             "<col_name> INTEGER",
+                        "integer_primary_key": "<key_name> INTEGER PRIMARY KEY",
+                        "text":                "<col_name> TEXT",
+                        "decimal":             "<col_name> REAL"
+                    }
+                },
+                "重新组织数据库文件": {
+                    "STATMENT": [
+                        "VACUUM;",
+                        "PRAGMA vacuum;"
+                    ],
+                    "PURPOSES": [
+                        "释放未使用空间",
+                        "此命令将创建新的数据库文件, 名为 \"database\"-wal, 可将其重命名为原始数据库文件名"
+                    ]
+                },
+                "重建所有的索引": {
+                    "STATMENT": ["REINDEX;"],
+                    "PURPOSES": ["回收因删除大量数据而产生的索引空间"]
+                }
+            }
+        }
+    },
+
+    "POSTGRESQL": {
+        "VERSION": {
+            "16.0": {
+                "CREATE_DATABASE": {
+                    "STATMENT": ["psql -U <user_name> -c \"CREATE DATABASE <database_name>[ OWNER <user_name>];\""],
+                "CREATE_TABLE": {
+                    "STATMENT": ["CREATE TABLE[ IF NOT EXISTS] <table_name> (...);"],
+                    "TYPE": {
+                        "integer":             "<col_name> INTEGER",
+                        "integer_primary_key": "<col_name> SERIAL PRIMARY KEY",
+                        "text":                "<col_name> VARCHAR(128)",
+                        "decimal":             "<col_name> DECIMAL(28,4)"
+                    }
+                },
+                "CREATE_USER": {
+                    "STATMENT": ["CREATE USER[ IF NOT EXISTS] <user_name> WITH PASSWORD '<password>';"]
+                },
+                "DROP_DATABASE": {
+                    "STATMENT": ["psql -U <user_name> -c \"DROP DATABASE <database_name>;\""]
+                },
+                "GRANT_USER": {
+                    "STATMENT": ["GRANT SELECT, INSERT, UPDATE, DELETE ON <table_name> TO <user_name>;"]
+                }
+            }
+        }
+    }
+}

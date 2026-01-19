@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* 加载遮罩 */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* 加载容器 */
+        .loader-container {
+            text-align: center;
+        }
+
+        /* 旋转圈 */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        /* 加载文字 */
+        .loading-text {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* 进度百分比 */
+        .progress-percent {
+            color: #3498db;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* 旋转动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 页面内容初始隐藏 */
+        .content {
+            display: none;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载遮罩 -->
+    <div id="loading-overlay">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <div class="loading-text">加载中...</div>
+            <div class="progress-percent" id="progressPercent">0%</div>
+        </div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="content" id="content">
+        <h1>页面内容</h1>
+        <p>这里是加载完成后显示的内容</p>
+    </div>
+
+    <script>
+        // 模拟加载过程
+        function simulateLoading() {
+
+            const overlay = document.getElementById('loading-overlay');
+            const content = document.getElementById('content');
+            const progressPercent = document.getElementById('progressPercent');
+
+            let currentProgress = 0;
+            const targetProgress = 100;
+
+            // 更新进度
+            function updateProgress() {
+                currentProgress += Math.random() * 15 + 5; // 每次增加5-20%
+                if (currentProgress > targetProgress) {
+                    currentProgress = targetProgress;
+                }
+
+                progressPercent.textContent = Math.floor(currentProgress) + '%';
+
+                // 未完成时继续更新
+                if (currentProgress < targetProgress) {
+                    setTimeout(updateProgress, 200);
+                } else {
+                    // 加载完成
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        content.style.display = 'block';
+                    }, 300);
+                }
+            }
+
+            // 开始加载
+            setTimeout(updateProgress, 100);
+        }
+
+        // 页面加载完成后开始模拟加载
+        window.addEventListener('load', simulateLoading);
+    </script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+DOC_Web-Crawler_Proxy_IP_Pool_构建示例_GF_2024-07-14.txt
+
+Create by GF 2024-07-14 21:33
+
+--------------------------------------------------
+
+使用 requests (Python 3.8.0) 构建 Proxy IP 池 (www.kuaidaili.com):
+
+1. 观察页面(https://www.kuaidaili.com/free/inha/), 确定要抓取的 IP 信息数据。
+   页面布局如下所示 (其中存在一个表格, 表格中的 "IP" 和 "类型" 就是我们要抓取的内容):
+
+    +-------------------------------------------------------------------------------------------------------------------------+
+    |https://www.kuaidaili.com/free/inha/                                                                                     |
+    +-------------------------------------------------------------------------------------------------------------------------+
+    |  快代理(kuaidaili.com)    免费代理  产品  定价  文档与支持  安全合规  加入推广  博客                                    |
+    |-------------------------------------------------------------------------------------------------------------------------|
+    |  *免费国内代理  免费海外代理                                                                                            |
+    |-------------------------------------------------------------------------------------------------------------------------|
+    |  优质私密代理  *高匿开放代理  普通开放代理                                                                              |
+    |  开放代理由第三方服务器提供, IP不确定性较大, 总体质量不高。如需购买基于自营服务器的高质量IP产品, 欢迎提前试用。         |
+    |  +----------------+------+-------+-----+---------------------+---------------+-------------+-----------+                |
+    |  |IP              |PORT  |匿名度 |类型 |位置                 |响应速度(秒)   |最后验证时间 |付费方式   |                |
+    |  +----------------+------+-------+-----+---------------------+---------------+-------------+-----------+                |
+    |  |39.129.73.6     |443   |高匿名 |HTTP |昭通市               |0.2 2024-07-14 |20:30:03     |免费代理IP |                |
+    |  |223.100.178.167 |9091  |高匿名 |HTTP |本溪市               |0.2 2024-07-14 |19:30:02     |免费代理IP |                |
+    |  |8.213.151.128   |3128  |高匿名 |HTTP |韩国 首尔            |0.2 2024-07-14 |18:30:02     |免费代理IP |                |
+    |  |60.12.168.114   |9002  |高匿名 |HTTP |台州市               |0.1 2024-07-14 |17:30:02     |免费代理IP |                |
+    |  |119.96.100.63   |30000 |高匿名 |HTTP |武汉市               |0.1 2024-07-14 |16:30:03     |免费代理IP |                |
+    |  |154.203.132.55  |8080  |高匿名 |HTTP |美国 加利福尼亚      |0.2 2024-07-14 |15:30:03     |免费代理IP |                |
+    |  |198.44.255.3    |80    |高匿名 |HTTP |香港                 |0.2 2024-07-14 |14:30:02     |免费代理IP |                |
+    |  |154.203.132.55  |8080  |高匿名 |HTTP |美国 加利福尼亚      |0.1 2024-07-14 |13:30:01     |免费代理IP |                |
+    |  |112.99.7.108    |8060  |高匿名 |HTTP |绥化市               |0.1 2024-07-14 |12:30:03     |免费代理IP |                |
+    |  |58.52.216.91    |3128  |高匿名 |HTTP |恩施土家族苗族自治州 |0.3 2024-07-14 |11:30:01     |免费代理IP |                |
+    |  |111.59.4.88     |9002  |高匿名 |HTTP |南宁市               |0.1 2024-07-14 |10:30:04     |免费代理IP |                |
+    |  |125.77.25.178   |8080  |高匿名 |HTTP |福州市               |0.2 2024-07-14 |09:30:03     |免费代理IP |                |
+    |  +----------------+------+-------+-----+---------------------+---------------+-------------+-----------+                |
+    |  注: 表中响应速度是中国测速服务器的测试数据, 仅供参考。响应速度根据你机器所在的地理位置不同而有差异。                   |
+    |  +-------------------------------------------------------------------------------------------------+                    |
+    |  |声明：                                                                                           |                    |
+    |  |- 免费代理IP是第三方代理服务器，收集自互联网，并非快代理所有，快代理不对免费代理IP的有效性负责。 |                    |
+    |  |- 请合法使用开放代理IP，由用户使用开放代理IP带来的法律责任与快代理无关。                         |                    |
+    |  |- 若开放代理IP侵犯了您的权益，请通过客服及时告知，快代理将在第一时间删除。                       |                    |
+    |  +-------------------------------------------------------------------------------------------------+                    |
+    |  共 87623 条 < 1 2 3 4 5 6 ... 7302 > 跳至 ____ 页                                                                      |
+    |-------------------------------------------------------------------------------------------------------------------------|
+    |  Copyright © 2013 - 2024 快代理                                                                                         |
+    |  积善科技 (北京) 有限公司                                                                                               |
+    |-------------------------------------------------------------------------------------------------------------------------|
+    |  公安备案 42018502007272号  京ICP备 16054786号  增值电信经营许可证 京B2-20181007  互联网虚拟专用网业务许可证 B1-2018461 |
+    +-------------------------------------------------------------------------------------------------------------------------+
+
+    最终抓取的效果如下:
+
+        Proxy_IP_kuaidaili_com_All.txt
+        ----------
+        {'HTTP': '39.129.73.6'}
+        {'HTTP': '223.100.178.167'}
+        {'HTTP': '8.213.151.128'}
+        {'HTTP': '60.12.168.114'}
+        {'HTTP': '119.96.100.63'}
+        {'HTTP': '154.203.132.55'}
+        {'HTTP': '198.44.255.3'}
+        {'HTTP': '154.203.132.55'}
+        {'HTTP': '112.99.7.108'}
+        {'HTTP': '58.52.216.91'}
+        {'HTTP': '111.59.4.88'}
+        {'HTTP': '125.77.25.178'}
+        ......
+        {'HTTP': '183.207.224.51'}
+
+2. 编写函数: 发送请求 & 获取响应。
+
+    * 完整代码:
+
+        import time
+        import requests
+        from lxml import etree
+
+        # 发送请求 & 获取响应。
+        def Send_Request_and_Get_Response(URL:str):
+
+            print("[Message] Web Crawling: Processing {}".format(URL))
+
+            # 目标网页, 添加 Headers 参数。
+            My_Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
+
+            # 发送请求 (模拟浏览器发送请求, 获取响应数据)。
+            Response = requests.get(URL, headers=My_Headers)
+
+            time.sleep(1)
+
+            return Response
+
+3. 编写函数: 解析响应的数据 & 解析表格行(Rows)为 Python 列表。
+
+    * HTML 源码特征:
+
+        <table class="table table-bordered table-striped">
+            <thead>...</thead>
+            <tbody>
+                <tr>
+                    <td data-title="IP" class>124.204.33.162</td>
+                    <td data-title="PORT">8000</td>
+                    <td data-title="匿名度">高匿名</td>
+                    <td data-title="类型">HTTP</td>
+                    <td data-title="位置">中国 北京 联通</td>
+                    <td data-title="响应速度">1秒</td>
+                    <td data-title="最后验证时间">2021-11-27 16:31:01</td>
+                </tr>
+                <tr>
+                    <td data-title="IP" class>116.242.31.64</td>
+                    <td data-title="PORT">80</td>
+                    <td data-title="匿名度">高匿名</td>
+                    <td data-title="类型">HTTP</td>
+                    <td data-title="位置">中国 北京 联通</td>
+                    <td data-title="响应速度">4秒</td>
+                    <td data-title="最后验证时间">2021-11-27 15:31:02</td>
+                </tr>
+                <tr>
+                    <td data-title="IP">182.84.145.41</td>
+                    <td data-title="P0RT">3256</td>
+                    <td data-title="匿名度">高匿名</td>
+                    <td data-title="类型">HTTP</td>
+                    <td data-title="位置">中国 江西 赣州 电信</td>
+                    <td data-title="响应速度">1秒</td>
+                    <td data-title="最后验证时间">2021-11-27 14:31:01</td>
+                </tr>
+                <tr>...</tr>
+                <tr>...</tr>
+
+    * 完整代码:
+
+        # 解析响应的数据 & 解析表格行(Rows)为 Python 列表。
+        def Parse_The_Response_Data_and_Parse_Table_Rows_as_List(Response):
+        
+            Data = Response.content.decode()
+            
+            # lxml etree 的 XML/HTML 解析函数说明:  
+            # - etree.fromstring(text, parser=None, base_url=None, **kw):
+            #   这个函数用于将字符串 (text) 解析成一个 ElementTree 的根元素。
+            #   这个函数默认是针对 XML 文档的, 尽管它也可以用来解析简单的 HTML, 但在处理 HTML 时可能不会那么健壮或宽容。
+            #   parser 参数允许你指定一个解析器, 比如可以使用 lxml 提供的 HTML 解析器, 但这需要显式指定。
+            #   示例: root = etree.fromstring(html_content, etree.HTMLParser())
+            # - etree.HTML(html, parser=None, base_url=None, **kw):
+            #   这个函数专门用于解析 HTML 文档。
+            #   它会自动处理 HTML 中的一些常见问题 (比如未闭合的标签), 并且默认使用 lxml 的 HTML 解析器。这使得它在处理 HTML 文档时更加健壮和宽容。
+            #   示例: root = etree.HTML(response.content.decode())
+            
+            HTML_Data = etree.HTML(Data)
+            
+            # 分组数据 (分组取到 <tr> 标签下, etree 的 XPath 取出的所有 <tr> 将会以 Python 列表的形式返回)。
+            Table_Rows_List = HTML_Data.xpath('//table[@class="table table-bordered table-striped"]/tbody/tr')
+        
+            return Table_Rows_List
+
+4. 编写函数: 提取 Proxy IP 信息数据。
+
+    * 完整代码:
+    
+        # 提取 Proxy IP 信息数据。
+        def Extract_Proxy_IP_Information_Data(Table_Rows_List:list):
+        
+            Proxies_IP_List:list = []
+            
+            for tr in Table_Row_List:
+                Protocol      = tr.xpath('./td[4]/text()')
+                Proxy_IP      = tr.xpath('./td[1]/text()')
+                Proxy_IP_Port = tr.xpath('./td[2]/text()')
+                
+                Proxy_IP_Dict:dict = {}
+        
+                Protocol      = str(' ').join(Protocol)
+                Proxy_IP      = str(' ').join(Proxy_IP)
+                Proxy_IP_Port = str(' ').join(Proxy_IP_Port)
+                
+                Proxy_IP_Dict[Protocol] = (str(Proxy_IP) + ":" + str(Proxy_IP_Port))
+                
+                Proxies_IP_List.append(Proxy_IP_Dict)
+        
+            return Proxies_IP_List
+
+5. 编写函数: 检测 Proxy IP 可用性。
+
+    * 完整代码:
+
+        # 通过 Timeout 检测 Proxy IP 可用性。
+        def Check_Proxy_IP_by_Timeout(Protocol:str, Proxy_IP:str, Port:str):
+            
+            # 代理 IP 常见两种分类依据 (匿名度, 协议)。
+            # 根据匿名度分类:
+            # - 高匿代理: Web 端只能看到代理 IP。
+            # - 普通代理: Web 端知道有人通过此代理 IP 访问，但不知用户真实 IP。
+            # - 透明代理: Web 端能看到用户真实 IP, 也能看到代理 IP。
+            # 根据协议分类:
+            # - HTTP 代理: 目标 URL 为 HTTP 协议。
+            # - HTTPS 代理: 目标 URL 为 HTTPS 协议。
+            # - SOCKS 代理: 简单的传递数据包, 不关心是何种协议, 比 HTTP 和 HTTPS 代理消耗小, 可以转发 HTTP 和 HTTPS 的请求。
+            
+            My_Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
+            
+            try:
+            
+                # requests.get() 中 proxies 参数语法格式:
+                # - proxies={"协议": "协议://IP:端口号"}
+                # requests.get() 中 proxies 参数用法示例:
+                # - proxies={"http": "http://47.242.47.64:8888", "https": "https://58.52.216.91:3128"}
+                # requests.get() 中 timeout 参数用法示例:
+                # - 例如: 以 requests.get(url, timeout=3) 这样的方式发送网络请求。
+                # - 其中, timeout=3 表示在发送请求后, 最多等待 3 秒钟内返回响应, 如果在规定的时间内没有得到响应, 就会抛出超时异常。
+                
+                My_Proxies:dict = {str(Protocol).lower(): str(Protocol).lower() + str("://") + str(Proxy_IP) + str(':') + str(Port)}
+                
+                # 测试: 使用代理 IP 访问测试网站 (http://httpbin.org/get) 并确认 IP (一般查看类似 "origin": "222.74.73.202" 这个信息)。
+                # response = requests.get("http://httpbin.org/get", headers=My_Headers, proxies=My_Proxies, timeout=1.0)
+                # print(response.text)
+                
+                response = requests.get("https://www.baidu.com/", headers=My_Headers, proxies=My_Proxies, timeout=0.1)
+                
+                if response.status_code == 200:
+                    return int(1)
+                else:
+                    return int(0)
+            
+            except Exception as e:
+                    #print(e)
+                    print("[Caution] An Error Occurred While Processing:", My_Proxies[str(Protocol).lower()], '|', "The Error is:", e)
+                    return int(0)
+
+6. 编写函数: 保存 Proxy IP 信息数据写入文本。
+
+    * 完整代码:
+
+        # 保存 Proxy IP 信息数据写入文本。
+        def Save_Proxy_IP_as_Text(Proxies_IP_List:list):
+            
+            file = open("./IP.txt", 'w')
+            
+            for i in range(len(Proxies_IP_List)):
+                
+                s = (str(Proxies_IP_List[i]) + str('\n'))
+                
+                file.write(s)
+            
+            file.close()
+
+7. 编写函数: 随机取用 Proxy IP。
+
+    * 完整代码:
+    
+        import random
+        import requests
+        
+        # 打开文件, 换行读取。
+        f=open("./IP.txt", 'r')
+        file = f.readlines()
+        
+        # 遍历并分别存入列表, 方便随机选取IP
+        item = []
+        for proxies in file:
+            proxies = eval(proxies.replace('\n', '')) # -> 以换行符分割, 转换为 dict 对象。
+            item.append(proxies)
+        
+        My_Proxies = random.choice(item)  # 随机选取一个IP
+        
+        URL = 'https://www.baidu.com/'
+        My_Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
+        
+        response = requests.get(URL, headers=My_Headers, proxies=My_Proxies)
+        print(response.status_code) # -> 输出状态码 200, 表示访问成功。
+
+8. 总结:
+  
+  8.1. 批量获取 Proxy IP 以便进一步测试 Proxy IP。
+  8.2. 对获取到的 Proxy IP 进行可用性检测, 对不可用和高可用的 Proxy IP 分别标记。
+  8.3. 随机取用 Proxy IP。
+
+--------------------------------------------------
+EOF

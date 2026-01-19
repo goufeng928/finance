@@ -1,0 +1,22 @@
+{
+    "tushare": {
+        "1.4.24": {
+            "stocks": {
+                "founction_daily_data": "tushare.pro_api( \"api_key\" ).daily( adj:str, start_date:str = \"20250101\", end_date:str = \"20250101\" )",
+                "option_time_scale": "daily",
+                "option_adjusted": null,
+                "option_adjusted_comment": {"不复权": null, "前复权": "qfq", "后复权": "hfq"}
+            }
+        }
+    },
+
+    "postgresql": {
+        "16.10": {
+            "host": "127.0.0.1",
+            "port": "5432",
+            "init_database": "postgres",
+            "user": "writer",
+            "password": "abcd1234"
+        }
+    }
+}
