@@ -1,0 +1,74 @@
+Embed_Text_Model.txt
+
+    BAAI/
+      + bge-m3/
+      |   + 1_Pooling/
+      |   |   + config.json
+      |   + imgs/
+      |   |   + .DS_Store
+      |   |   + bm25.jpg
+      |   |   + long.jpg
+      |   |   + miracl.jpg
+      |   |   + mkqa.jpg
+      |   |   + nqa.jpg
+      |   |   + others.webp
+      |   + onnx/
+      |   |   + config.json
+      |   |   + Constant_7_attr__value
+      |   |   + model.onnx
+      |   |   + model.onnx_data
+      |   |   + sentencepiece.bpe.model
+      |   |   + special_tokens_map.json
+      |   |   + tokenizer.json
+      |   |   + tokenizer_config.json
+      |   + .gitattributes
+      |   + colbert_linear.pt
+      |   + config.json
+      |   + config_sentence_transformers.json
+      |   + long.jpg
+      |   + modules.json
+      |   + pytorch_model.bin
+      |   + README.md
+      |   + sentence_bert_config.json
+      |   + sentencepiece.bpe.model
+      |   + sparse_linear.pt
+      |   + special_tokens_map.json
+      |   + tokenizer.json
+      .   + tokenizer_config.json
+    
+    nomic-ai/
+      + nomic-bert-2048/
+      |   + .gitattributes
+      |   + config.json
+      |   + configuration_hf_nomic_bert.py
+      |   + model.safetensors
+      |   + modeling_hf_nomic_bert.py
+      |   + pytorch_model.bin
+      |   + README.md
+      |   + special_tokens_map.json
+      |   + tokenizer.json
+      |   + tokenizer_config.json
+      .   + vocab.txt
+      + nomic-embed-text-v1.5/
+      |   + 1_Pooling/
+      |   |   + config.json
+      |   + onnx/
+      |   |   + model.onnx
+      |   |   + model_bnb4.onnx
+      |   |   + model_fp16.onnx
+      |   |   + model_int8.onnx
+      |   |   + model_q4.onnx
+      |   |   + model_q4f16.onnx
+      |   |   + model_quantized.onnx
+      |   |   + model_uint8.onnx
+      |   + .gitattributes
+      |   + README.md
+      |   + config.json
+      |   + config_sentence_transformers.json
+      |   + model.safetensors
+      |   + modules.json
+      |   + sentence_bert_config.json
+      |   + special_tokens_map.json
+      |   + tokenizer.json
+      |   + tokenizer_config.json
+      .   + vocab.txt

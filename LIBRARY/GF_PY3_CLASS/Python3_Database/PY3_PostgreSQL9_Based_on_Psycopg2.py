@@ -1,4 +1,4 @@
-# GF_PY3_CLASS/Python3_Database/PY3_PostgreSQL9_By_Psycopg2.py
+# GF_PY3_CLASS/Python3_Database/PY3_PostgreSQL9_Based_on_Psycopg2.py
 # Create by GF 2025-04-02 23:42
 
 import numpy
@@ -23,7 +23,7 @@ class PY3_Integer_Primary_Key():
         # ..........................................
         return Copy
 
-class PY3_PostgreSQL9_By_Psycopg2_INSERT_ITERATOR(object):
+class PY3_PostgreSQL9_Based_on_Psycopg2_INSERT_ITERATOR(object):
 
     # Examples:
     # >>> import pandas
@@ -35,7 +35,7 @@ class PY3_PostgreSQL9_By_Psycopg2_INSERT_ITERATOR(object):
     #  1   2  20240731  21.62  21.92  21.80  21.90
     # 70  70  20240731  24.30  24.45  24.00  24.20
     # >>>
-    # >>> PGSQL_INSERT_ITERATOR = PY3_PostgreSQL9_By_Psycopg2_INSERT_ITERATOR()
+    # >>> PGSQL_INSERT_ITERATOR = PY3_PostgreSQL9_Based_on_Psycopg2_INSERT_ITERATOR()
     # >>> PGSQL_INSERT_ITERATOR.Pub_DB_Host = "127.0.0.1"
     # >>> PGSQL_INSERT_ITERATOR.Pub_DB_Database = "postgres"
     # >>> PGSQL_INSERT_ITERATOR.Pub_DB_User = "postgres"
@@ -227,10 +227,10 @@ class PY3_PostgreSQL9_By_Psycopg2_INSERT_ITERATOR(object):
         # ..........................................
         return Affected_Rows_Number
 
-class PY3_PostgreSQL9_By_Psycopg2(object):
+class PY3_PostgreSQL9_Based_on_Psycopg2(object):
 
     # Examples:
-    # >>> PGSQL = PY3_PostgreSQL9_By_Psycopg2()
+    # >>> PGSQL = PY3_PostgreSQL9_Based_on_Psycopg2()
     # >>> PGSQL.Pub_DB_Host = "127.0.0.1"
     # >>> PGSQL.Pub_DB_Database = "postgres"
     # >>> PGSQL.Pub_DB_User = "postgres"
@@ -249,7 +249,7 @@ class PY3_PostgreSQL9_By_Psycopg2(object):
         self.Pub_DB_User:str     = "unknow_user"
         self.Pub_DB_Password:str = "unknow_password"
         # ..........................................
-        self.INSERT_ITERATOR = PY3_PostgreSQL9_By_Psycopg2_INSERT_ITERATOR()
+        self.INSERT_ITERATOR = PY3_PostgreSQL9_Based_on_Psycopg2_INSERT_ITERATOR()
 
     def Set_DB_Host(self, DB_Host:str) -> int:
 

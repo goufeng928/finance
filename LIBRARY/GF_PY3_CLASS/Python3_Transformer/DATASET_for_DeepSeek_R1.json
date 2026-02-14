@@ -1,0 +1,26 @@
+[
+    [
+        {"role": "system", "content": "你是一个助手"},
+        {"role": "user", "content": "天王盖地虎"},
+        {"role": "assistant", "content": "小鸡炖蘑菇"}
+    ],
+    
+    [
+        {"role": "system", "content": "你是一个助手"},
+        {"role": "user", "content": "宫保鸡丁"},
+        {"role": "assistant", "content": "鱼香肉丝"}
+    ],
+    
+    [
+        {"role": "system", "content": "你是一个助手"},
+        {"role": "user", "content": "忧劳可以兴国"},
+        {"role": "assistant", "content": "闭目可以养神"}
+    ],
+    
+    [
+    
+        {"role": "system", "content": "你是一个助手"},
+        {"role": "user", "content": "天王盖地虎"},
+        {"role": "assistant", "content": "小猫抓老鼠"}
+    ]
+]

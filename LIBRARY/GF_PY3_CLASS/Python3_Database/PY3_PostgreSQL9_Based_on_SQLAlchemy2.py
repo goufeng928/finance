@@ -1,4 +1,4 @@
-# GF_PY3_CLASS/Python3_Database/PY3_PostgreSQL9_By_SQLAlchemy2.py
+# GF_PY3_CLASS/Python3_Database/PY3_PostgreSQL9_Based_on_SQLAlchemy2.py
 # Create by GF 2025-04-02 23:42
 
 import pandas
@@ -20,10 +20,10 @@ class PY3_Integer_Primary_Key():
         # ..........................................
         return Copy
 
-class PY3_PostgreSQL9_By_SQLAlchemy2(object):
+class PY3_PostgreSQL9_Based_on_SQLAlchemy2(object):
 
     # Examples:
-    # >>> PGSQL = PY3_PostgreSQL9_By_SQLAlchemy2()
+    # >>> PGSQL = PY3_PostgreSQL9_Based_on_SQLAlchemy2()
     # >>> PGSQL.Pub_DB_Host     = "127.0.0.1"
     # >>> PGSQL.Pub_DB_Database = "postgres"
     # >>> PGSQL.Pub_DB_User     = "postgres"

@@ -79,7 +79,7 @@ class PY3_MySQL8_Based_on_PyMySQL(object):
         # ..........................................
         return result
 
-    def INSERT_BY_JSON_Record(self, JSON_Record:dict, DB_Table:str) -> int:
+    def INSERT_BY_JSON_Record(self, JSON_Record:dict, dbTable:str) -> int:
 
         conn = self.Init_Connection()
         # ..........................................
@@ -119,7 +119,7 @@ class PY3_MySQL8_Based_on_PyMySQL(object):
         # >>> cursor.execute(sql, values)
         # >>> conn.commit()
         # ..........................................
-        SQL_Statement_Part_A:str = "INSERT INTO %s (" % DB_Table
+        SQL_Statement_Part_A:str = "INSERT INTO %s (" % dbTable
         SQL_Statement_Part_B:str = ") VALUES ("
         # ..........................................
         Fields_List:list       = list(JSON_Record.keys())
@@ -150,7 +150,7 @@ class PY3_MySQL8_Based_on_PyMySQL(object):
         # ..........................................
         return Affected_Rows_Number
 
-    def BATCH_INSERT_BY_JSON_Records(self, JSON_Records:list, DB_Table:str) -> int:
+    def BATCH_INSERT_BY_JSON_Records(self, JSON_Records:list, dbTable:str) -> int:
 
         JSON_Records_Length = len(JSON_Records)
         JSON_Records_MaxIdx = JSON_Records_Length - 1
@@ -159,7 +159,7 @@ class PY3_MySQL8_Based_on_PyMySQL(object):
         # ..........................................
         i:int = self.Pub_JSON_Records_MinIdx
         while (i <= JSON_Records_MaxIdx):
-            Affected_Rows_Number       = self.INSERT_BY_JSON_Record(JSON_Record = JSON_Records[i], DB_Table = DB_Table)
+            Affected_Rows_Number       = self.INSERT_BY_JSON_Record(JSON_Record = JSON_Records[i], dbTable = dbTable)
             Affected_Rows_Number_Total = Affected_Rows_Number_Total + Affected_Rows_Number
             i = i + 1
         # ..........................................

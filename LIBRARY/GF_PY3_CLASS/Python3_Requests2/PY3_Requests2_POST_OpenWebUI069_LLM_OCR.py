@@ -1,4 +1,4 @@
-# GF_PY3_CLASS/Python3_Requests2/PY3_Requests2_POST_OpenWebUI069_LLM_OCR.py
+# PY3_Requests2_POST_OpenWebUI069_LLM_OCR.py
 # Create by GF 2025-09-19 16:53
 
 # Requirement: LLM (Multimodal)
@@ -17,9 +17,8 @@ class PY3_Requests2_POST_OpenWebUI069_LLM_OCR(object):
 
         self.Pub_Host:str = "127.0.0.1"
         self.Pub_Port:str = "3000"
-        # ..........................................
         self.Pub_Model:str = "granite3.1-dense:8b"
-        self.Pub_Token:str = ''
+        self.Pub_Key:str = ''
 
     def File_to_Text(self, File_Path:str, DPI:int = 150) -> str:
 
@@ -36,15 +35,15 @@ class PY3_Requests2_POST_OpenWebUI069_LLM_OCR(object):
         PNG_Text:str = str('')
         # ..........................................
         POST_OpenWebUI069 = PY3_Requests2_POST_OpenWebUI069.PY3_Requests2_POST_OpenWebUI069()
-        POST_OpenWebUI069.Pub_Host = self.Pub_Host
-        POST_OpenWebUI069.Pub_Port = self.Pub_Port
+        POST_OpenWebUI069.Pub_Host  = self.Pub_Host
+        POST_OpenWebUI069.Pub_Port  = self.Pub_Port
+        POST_OpenWebUI069.Pub_Key   = self.Pub_Key
+        POST_OpenWebUI069.Pub_Model = self.Pub_Model
         # ..........................................
         PNG_Text = POST_OpenWebUI069.Round_1_Chat_With_Image_File(
-            Token                     = self.Pub_Token,
-            Model                     = self.Pub_Model,
-            Message                   = "Please extract the content from the image.",
-            Image_File_Path           = PNG_Path,
-            Specified_Image_Extension = ".png"
+            Message         = "Please extract the content from the image.",
+            Image_Path      = PNG_Path,
+            Image_Extension = ".png"
         )
         # ..........................................
         return PNG_Text
@@ -54,15 +53,15 @@ class PY3_Requests2_POST_OpenWebUI069_LLM_OCR(object):
         JPG_Text:str = str('')
         # ..........................................
         POST_OpenWebUI069 = PY3_Requests2_POST_OpenWebUI069.PY3_Requests2_POST_OpenWebUI069()
-        POST_OpenWebUI069.Pub_Host = self.Pub_Host
-        POST_OpenWebUI069.Pub_Port = self.Pub_Port
+        POST_OpenWebUI069.Pub_Host  = self.Pub_Host
+        POST_OpenWebUI069.Pub_Port  = self.Pub_Port
+        POST_OpenWebUI069.Pub_Key   = self.Pub_Key
+        POST_OpenWebUI069.Pub_Model = self.Pub_Model
         # ..........................................
         JPG_Text = POST_OpenWebUI069.Round_1_Chat_With_Image_File(
-            Token                     = self.Pub_Token,
-            Model                     = self.Pub_Model,
-            Message                   = "Please extract the content from the image.",
-            Image_File_Path           = JPG_Path,
-            Specified_Image_Extension = ".jpg"
+            Message         = "Please extract the content from the image.",
+            Image_Path      = JPG_Path,
+            Image_Extension = ".jpg"
         )
         # ..........................................
         return JPG_Text
@@ -85,8 +84,10 @@ class PY3_Requests2_POST_OpenWebUI069_LLM_OCR(object):
         PDF_File = fitz.open(PDF_Path)  # 打开 PDF 文件
         # ..........................................
         POST_OpenWebUI069 = PY3_Requests2_POST_OpenWebUI069.PY3_Requests2_POST_OpenWebUI069()
-        POST_OpenWebUI069.Pub_Host = self.Pub_Host
-        POST_OpenWebUI069.Pub_Port = self.Pub_Port
+        POST_OpenWebUI069.Pub_Host  = self.Pub_Host
+        POST_OpenWebUI069.Pub_Port  = self.Pub_Port
+        POST_OpenWebUI069.Pub_Key   = self.Pub_Key
+        POST_OpenWebUI069.Pub_Model = self.Pub_Model
         # ..........................................
         for Page_Num in range(len(PDF_File)):
             # 获取 PDF 页面
@@ -101,15 +102,13 @@ class PY3_Requests2_POST_OpenWebUI069_LLM_OCR(object):
             Img_Base64      = "data:image/png;base64,%s" % Org_Base64
             # ......................................
             PDF_Page_Text:str = POST_OpenWebUI069.Round_1_Chat_With_Image_Base64(
-                Token        = self.Pub_Token,
-                Model        = self.Pub_Model,
                 Message      = "Please extract the content from the image.",
                 Image_Base64 = Img_Base64
             )
             # ......................................
             PDF_Full_Text    = "%sPage Number: %d\n%s\n\n" % (PDF_Full_Text, Page_Num, PDF_Page_Text)
             # ......................................
-            if (Max_Read_Page_Num != 0 and Max_Read_Page_Num == Page_Num):
+            if (Max_Read_Page_Num != 0 and Page_Num >= Max_Read_Page_Num):
                 break
         # ..........................................
         PDF_File.close()  # 关闭 PDF 文件

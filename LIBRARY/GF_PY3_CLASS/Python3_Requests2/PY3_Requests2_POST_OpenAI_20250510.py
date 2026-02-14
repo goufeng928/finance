@@ -1,4 +1,4 @@
-# PY3_Requests2_POST_OpenWebUI069.py
+# PY3_Requests2_POST_OpenAI_20250510.py
 # Create by GF 2025-12-26 14:13
 
 import base64
@@ -8,13 +8,15 @@ import requests
 
 # ##################################################
 
-class PY3_Requests2_POST_OpenWebUI069():
+class PY3_Requests2_POST_OpenAI_20250510():
+
+    # OpenAI Style URL (20250505):
+    # - http://127.0.0.1/v1/chat/completions
 
     def __init__(self):
 
-        self.Pub_Host:str = "127.0.0.1"
-        self.Pub_Port:str = "3000"
-        self.Pub_Model:str = "granite3.1-dense:8b"
+        self.Pub_URL:str = "http://127.0.0.1/v1/chat/completions"
+        self.Pub_Model:str = "gpt4"
         self.Pub_Key:str = ''
 
     def Image_File_Encode_to_Base64(self, Image_Path:str, Image_Extension:str = "auto") -> str:
@@ -51,20 +53,22 @@ class PY3_Requests2_POST_OpenWebUI069():
     def Round_1_Chat(self, Message:str) -> str:
 
         # Requests JSON Data Example:
-        # - {"model": "granite3.1-dense:8b", "messages": [{"role": "user", "content": "Please introduce yourself!"}]}
+        # - {"model": "gpt-4", "messages": [{"role": "user", "content": "Please introduce yourself!"}]}
 
-        URL:str       = f"http://{self.Pub_Host}:{self.Pub_Port}/api/chat/completions"
         Headers:dict  = {'Authorization': f'Bearer {self.Pub_Key}', 'Content-Type': 'application/json'}
         Messages:list = [{"role": "user", "content": Message}]
         Data:dict     = {"model": self.Pub_Model, "messages": Messages}
-        Response      = requests.post(URL, headers = Headers, json = Data)
+        Response      = requests.post(url = self.Pub_URL, headers = Headers, json = Data)
         Response_JSON = Response.json()
         # ..........................................
         if (Response_JSON.get("choices", []) == []):
-            # Open WebUI 0.6.9 响应出错示例:
-            # - {"detail": "400: The decoder prompt (length 12201) is longer than the maximum model length of 819 ..."}
-            Response_Text:str = Response_JSON.get("detail", '')
-            print(f"[DEBUG] PY3_Requests2_POST_OpenWebUI069.Round_1_Chat: {Response_Text}")
+            # OpenAI Style 响应出错示例 (20250505):
+            # - {'error': {'message': 'invalid param model:gpt-4x (sid: cha000b9019@dx196bacca051b8f2532)',
+            # -            'type': 'invalid_request_error',
+            # -            'param': None,
+            # -            'code': '10005'}}
+            Response_Text:str = Response_JSON.get("error", {}).get("message", '')
+            print(f"[DEBUG] PY3_Requests2_POST_OpenAI_20250510.Round_1_Chat: {Response_Text}")
             return Response_Text
         # ..........................................
         if (Response_JSON.get("choices", []) != []):
@@ -74,19 +78,18 @@ class PY3_Requests2_POST_OpenWebUI069():
     def Round_1_Chat_With_Image_Base64(self, Message:str, Image_Base64:str) -> str:
 
         # Requests JSON Data Example:
-        # - {"model": "granite3.1-dense:8b", "messages": [{"role": "user", "content": "Please introduce yourself!"}]}
+        # - {"model": "gpt-4", "messages": [{"role": "user", "content": "Please introduce yourself!"}]}
 
-        URL:str              = f"http://{self.Pub_Host}:{self.Pub_Port}/api/chat/completions"
         Headers:dict         = {'Authorization': f'Bearer {self.Pub_Key}', 'Content-Type': 'application/json'}
         Message_Content:list = [{"type": "text", "text": Message}, {"type": "image_url", "image_url": {"url": Image_Base64}}]
         Messages:list        = [{"role": "user", "content": Message_Content}]
         Data:dict            = {"model": self.Pub_Model, "messages": Messages}
-        Response             = requests.post(URL, headers = Headers, json = Data)
+        Response             = requests.post(url = self.Pub_URL, headers = Headers, json = Data)
         Response_JSON        = Response.json()
         # ..........................................
         if (Response_JSON.get("choices", []) == []):
-            Response_Text:str = Response_JSON.get("detail", '')
-            print(f"[DEBUG] PY3_Requests2_POST_OpenWebUI069.Round_1_Chat_With_Image_Base64: {Response_Text}")
+            Response_Text:str = Response_JSON.get("error", {}).get("message", '')
+            print(f"[DEBUG] PY3_Requests2_POST_OpenAI_20250510.Round_1_Chat_With_Image_Base64: {Response_Text}")
             return Response_Text
         # ..........................................
         if (Response_JSON.get("choices", []) != []):

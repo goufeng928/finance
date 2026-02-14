@@ -1,4 +1,4 @@
-# GF_PY3_CLASS/Python3_Database/PY3_SQLite3_By_SQLAlchemy2.py
+# GF_PY3_CLASS/Python3_Database/PY3_SQLite3_Based_on_SQLAlchemy2.py
 # Create by GF 2025-04-02 23:42
 
 # 能力补充库 (Ability Supplementary Library)
@@ -9,12 +9,12 @@ import sqlalchemy
 
 # ##################################################
 
-class PY3_SQLite3_By_SQLAlchemy2:
+class PY3_SQLite3_Based_on_SQLAlchemy2:
 
     # Example for "Python 3 + SQLAlchemy 2 -> SQLite 3":
-    # >>> OBJ_PY3_SQLite3_By_SQLAlchemy2 = PY3_SQLite3_By_SQLAlchemy2()
-    # >>> OBJ_PY3_SQLite3_By_SQLAlchemy2.DB_PATH = "C:\\EXAMPLE.db"
-    # >>> Result = OBJ_PY3_SQLite3_By_SQLAlchemy2.Query("SELECT * FROM example;")
+    # >>> SQLITE = PY3_SQLite3_Based_on_SQLAlchemy2()
+    # >>> SQLITE.DB_PATH = "C:\\EXAMPLE.db"
+    # >>> Result = SQLITE.Query("SELECT * FROM example;")
     # >>> print(Result)
     #     id      date   open   high    low  close   volume
     #  0   1  20240731  21.52  21.80  21.40  21.52  1065652
@@ -37,25 +37,25 @@ class PY3_SQLite3_By_SQLAlchemy2:
         # ..........................................
         return Result
 
-    def APPEND_DataFrame(self, DataFrame, DB_TABLE:str) -> int:
+    def APPEND_DataFrame(self, DataFrame, dbTable:str) -> int:
 
         engine = sqlalchemy.create_engine(f"sqlite:///{self.DB_PATH}")
         # ..........................................
-        Affected_Rows = DataFrame.to_sql(DB_TABLE, con = engine, index = False, if_exists = 'append')
+        Affected_Rows = DataFrame.to_sql(dbTable, con = engine, index = False, if_exists = 'append')
         # ..........................................
         return Affected_Rows
 
-    def APPEND_Xlsx(self, Xlsx_Path:str, Sheet_Name:str, DB_TABLE:str) -> int:
+    def APPEND_Xlsx(self, Xlsx_Path:str, Sheet_Name:str, dbTable:str) -> int:
 
         engine = sqlalchemy.create_engine(f"sqlite:///{self.DB_PATH}")
         # ..........................................
         DataFrame = pandas.read_excel(Xlsx_Path, sheet_name = Sheet_Name)
         # ..........................................
-        Affected_Rows = DataFrame.to_sql(DB_TABLE, con = engine, index = False, if_exists = 'append')
+        Affected_Rows = DataFrame.to_sql(dbTable, con = engine, index = False, if_exists = 'append')
         # ..........................................
         return Affected_Rows
 
-    def TRUNCATE_TABLE(self, DB_TABLE:str) -> int:
+    def TRUNCATE_TABLE(self, dbTable:str) -> int:
 
         # 能力补充函数 (Ability Supplement Function)
 
@@ -66,7 +66,7 @@ class PY3_SQLite3_By_SQLAlchemy2:
         cursor = connection.cursor()
         # ..........................................
         # Sqlite 3.5x.x 不支持 TRUNCATE TABLE 语句
-        cursor.execute(f"DELETE FROM {DB_TABLE};")
+        cursor.execute(f"DELETE FROM {dbTable};")
         # ..........................................
         # 提交事务
         connection.commit()

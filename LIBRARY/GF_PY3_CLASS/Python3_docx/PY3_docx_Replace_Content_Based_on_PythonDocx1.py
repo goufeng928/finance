@@ -1,4 +1,4 @@
-# GF_PY3_CLASS/Python3_docx/PY3_docx_Replace_Content_Based_on_PythonDocx1.py
+# PY3_docx_Replace_Content_Based_on_PythonDocx1.py
 # Create by GF 2026-01-08 15:01
 
 import docx  # python-docx 1.2.0
@@ -129,6 +129,79 @@ class PY3_docx_Replace_Content_Based_on_PythonDocx1():
                 n = n + 1
             # ......................................
             m = m + 1
+        # ..........................................
+        return docx_File_Copy
+
+    def docx_File_Replace_Image_By_Image_Width_CM(self, docx_File, Image_Width_CM:float, New_Image_Path:str):
+
+        docx_File_Copy = docx_File
+        # ..........................................
+        for Element in docx_File_Copy.element.body:
+            # 处理 docx 段落
+            if (Element.tag.endswith('p') == True):
+                # 处理嵌套在 p 元素中的 drawing 元素 (图像以 "嵌入文本 (inline)" 方式插入)
+                for drawing in Element.xpath(".//w:drawing"):  # 提取段落中的图像
+                    blips:list = drawing.xpath(".//a:blip")
+                    # ..............................
+                    for blip in blips:
+                        embed_id:str   = blip.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed")
+                        image_path:str = f"word/media/image{embed_id}.jpg"  # 图像在文档中的位置
+
+                        # 获取图像尺寸信息
+                        # 转换单位为EMU（English Metric Units）
+                        # 1英寸 = 914400 EMU, 96 DPI下1像素 ≈ 9525 EMU
+                        # 1厘米 = 360000 EMU
+                        # 1毫米 = 36000 EMU
+                        # 1磅（point）= 12700 EMU（1英寸=72磅）
+                        # 但更准确的是保持原有的EMU值
+                        extents = drawing.xpath(".//wp:extent")
+                        if extents:
+                            cx = extents[0].get("cx")  # 宽度 (EMU 单位)
+                            cy = extents[0].get("cy")  # 高度 (EMU 单位)
+                        else:
+                            cx = None
+                            cy = None
+
+                        if (round(int(cx) / 360000, 2) == Image_Width_CM):
+
+                            # 查找对应的 Relationship
+                            if (embed_id in docx_File_Copy.part.related_parts):
+                                image_part       = docx_File_Copy.part.related_parts[embed_id]
+                                image_data:bytes = image_part._blob
+                                image_type:str   = image_part.content_type
+                            
+                            with open(New_Image_Path, 'rb') as f:
+                                new_image_data = f.read()
+                            image_part._blob = new_image_data
+            
+            # 处理 docx 文档主体 (body) 首层的绘图元素
+            # 当图像以 "浮动" 方式插入, 而不是 "嵌入文本" 时, 可能会作为独立对象
+            if (Element.tag.endswith("drawing") == True):    
+                blips:list = drawing.xpath(".//a:blip")
+                # ..................................
+                for blip in blips:
+                    embed_id:str   = blip.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed")
+                    image_path:str = f"word/media/image{embed_id}.jpg"  # 图像在文档中的位置
+
+                    extents = drawing.xpath(".//wp:extent")
+                    if extents:
+                        cx = extents[0].get("cx")  # 宽度 (EMU 单位)
+                        cy = extents[0].get("cy")  # 高度 (EMU 单位)
+                    else:
+                        cx = None
+                        cy = None
+                    
+                    if (round(int(cx) / 360000, 2) == Image_Width_CM):
+                    
+                        # 查找对应的 Relationship
+                        if (embed_id in docx_File_Copy.part.related_parts):
+                            image_part       = docx_File_Copy.part.related_parts[embed_id]
+                            image_data:bytes = image_part._blob
+                            image_type:str   = image_part.content_type
+                        
+                        with open(New_Image_Path, 'rb') as f:
+                            new_image_data = f.read()
+                        image_part._blob = new_image_data
         # ..........................................
         return docx_File_Copy
 
